@@ -1,6 +1,63 @@
 {
   "version": 3,
   "middleware": {},
-  "functions": {},
+  "functions": {
+    "/api/user/credits/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/edge-chunks/520.js",
+        "server/app/api/user/credits/route.js"
+      ],
+      "name": "app/api/user/credits/route",
+      "page": "/api/user/credits/route",
+      "matchers": [
+        {
+          "regexp": "^/api/user/credits$",
+          "originalSource": "/api/user/credits"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "mCOX15BomEDtMIVvFVrWg",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "R2t8TjTsnwVnKlccH9ig4orTK8j+Fbbd1xTZ+gJCq3U=",
+        "__NEXT_PREVIEW_MODE_ID": "b75602ee19297554c7c8c5123434853d",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "f350b48d0cf4aa333d9d4801340f5575d3b78212540959ae88d6c8f857d2b458",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "6aeed97f9de329eeb7f35871ad62574b2fed4b9acc7709a2b109f13a5881e9b0"
+      }
+    },
+    "/api/user/upsert/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/edge-chunks/520.js",
+        "server/app/api/user/upsert/route.js"
+      ],
+      "name": "app/api/user/upsert/route",
+      "page": "/api/user/upsert/route",
+      "matchers": [
+        {
+          "regexp": "^/api/user/upsert$",
+          "originalSource": "/api/user/upsert"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "mCOX15BomEDtMIVvFVrWg",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "R2t8TjTsnwVnKlccH9ig4orTK8j+Fbbd1xTZ+gJCq3U=",
+        "__NEXT_PREVIEW_MODE_ID": "b75602ee19297554c7c8c5123434853d",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "f350b48d0cf4aa333d9d4801340f5575d3b78212540959ae88d6c8f857d2b458",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "6aeed97f9de329eeb7f35871ad62574b2fed4b9acc7709a2b109f13a5881e9b0"
+      }
+    }
+  },
   "sortedMiddleware": []
 }

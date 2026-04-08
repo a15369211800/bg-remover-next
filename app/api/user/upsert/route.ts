@@ -2,17 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
+interface CloudflareEnv {
+  DB: D1Database;
+}
+
+function getDB(request: NextRequest): D1Database | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const env = (request as unknown as { env: CloudflareEnv }).env;
+  return env?.DB || null;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, image, google_id } = await request.json();
-    
+    const body = await request.json() as { email: string; name?: string; image?: string; google_id?: string };
+    const { email, name, image, google_id } = body;
+
     if (!email) {
       return NextResponse.json({ error: 'Email required' }, { status: 400 });
     }
 
-    // @ts-ignore - DB is injected by Cloudflare D1 binding
-    const db: D1Database = (process.env as any).DB || (globalThis as any).DB;
-    
+    const db = getDB(request);
     if (!db) {
       console.error('D1 database not bound');
       return NextResponse.json({ error: 'Database not available' }, { status: 503 });
@@ -24,7 +33,6 @@ export async function POST(request: NextRequest) {
     ).bind(email).first();
 
     if (!existing) {
-      // Create new user
       const id = crypto.randomUUID();
       await db.prepare(
         'INSERT INTO users (id, email, name, image, google_id, credits) VALUES (?, ?, ?, ?, ?, 2)'

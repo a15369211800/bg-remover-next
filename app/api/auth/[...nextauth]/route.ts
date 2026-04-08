@@ -42,7 +42,7 @@ const handler = NextAuth({
         try {
           const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/credits?email=${session.user.email}`);
           if (response.ok) {
-            const data = await response.json();
+            const data = await response.json() as { credits: number };
             session.user.credits = data.credits;
           }
         } catch (error) {

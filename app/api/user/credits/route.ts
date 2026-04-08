@@ -2,26 +2,34 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
+interface CloudflareEnv {
+  DB: D1Database;
+}
+
+function getDB(request: NextRequest): D1Database | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const env = (request as unknown as { env: CloudflareEnv }).env;
+  return env?.DB || null;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const email = request.nextUrl.searchParams.get('email');
-    
+
     if (!email) {
       return NextResponse.json({ error: 'Email required' }, { status: 400 });
     }
 
-    // @ts-ignore - DB is injected by Cloudflare D1 binding
-    const db: D1Database = (process.env as any).DB || (globalThis as any).DB;
-    
+    const db = getDB(request);
     if (!db) {
-      return NextResponse.json({ credits: 2 }); // Default if DB not available
+      return NextResponse.json({ credits: 2 });
     }
 
     const user = await db.prepare(
       'SELECT credits FROM users WHERE email = ?'
-    ).bind(email).first();
+    ).bind(email).first<{ credits: number }>();
 
-    return NextResponse.json({ credits: user ? (user as any).credits : 2 });
+    return NextResponse.json({ credits: user?.credits ?? 2 });
   } catch (error) {
     console.error('Credits error:', error);
     return NextResponse.json({ credits: 2 });

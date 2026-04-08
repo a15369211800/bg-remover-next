@@ -51,7 +51,7 @@ export default function Pricing() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan: 'pack_1' }),
         });
-        const data = await res.json();
+        const data = await res.json() as { id: string };
         return data.id;
       },
       onApprove: async (data) => {
@@ -60,7 +60,7 @@ export default function Pricing() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ orderID: data.orderID, plan: 'pack_1' }),
         });
-        const result = await res.json();
+        const result = await res.json() as { success: boolean; credits: number };
         if (result.success) {
           addCredits(result.credits);
           showToast(`✅ Payment successful! ${result.credits} credit(s) added.`);
@@ -81,7 +81,7 @@ export default function Pricing() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan: 'pack_10' }),
         });
-        const data = await res.json();
+        const data = await res.json() as { id: string };
         return data.id;
       },
       onApprove: async (data) => {
@@ -90,7 +90,7 @@ export default function Pricing() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ orderID: data.orderID, plan: 'pack_10' }),
         });
-        const result = await res.json();
+        const result = await res.json() as { success: boolean; credits: number };
         if (result.success) {
           addCredits(result.credits);
           showToast(`✅ Payment successful! ${result.credits} credits added.`);
@@ -131,7 +131,7 @@ export default function Pricing() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
       });
-      const result = await res.json();
+      const result = await res.json() as { success: boolean; credits?: number; approveUrl?: string; error?: string };
       if (result.approveUrl) {
         window.location.href = result.approveUrl;
       } else {
