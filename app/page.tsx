@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
+import { AuthButton } from '@/components/AuthButton';
 
 const API_KEY = '9e37wbtVkZrt1DqiJxTU4333';
 const TIMEOUT_MS = 30000;
@@ -256,12 +257,15 @@ export default function Home() {
       <div className="bg-white rounded-2xl p-8 md:p-10 w-full max-w-xl shadow-2xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-5 flex-wrap gap-2">
-          <button
-            onClick={toggleLang}
-            className="border-2 border-gray-200 rounded-full px-4 py-1 text-sm text-gray-600 hover:border-[#667eea] hover:text-[#667eea] transition-colors"
-          >
-            {t.langBtn}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleLang}
+              className="border-2 border-gray-200 rounded-full px-4 py-1 text-sm text-gray-600 hover:border-[#667eea] hover:text-[#667eea] transition-colors"
+            >
+              {t.langBtn}
+            </button>
+            <AuthButton />
+          </div>
           <Link
             href="/pricing"
             className="text-sm text-[#667eea] border border-[#667eea] rounded-full px-3 py-1 hover:bg-[#667eea] hover:text-white transition-colors"
