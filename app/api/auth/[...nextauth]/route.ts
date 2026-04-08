@@ -1,6 +1,5 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import { getUserByEmail, getUserByGoogleId, createUser } from "@/lib/db"
 
 const handler = NextAuth({
   providers: [
@@ -16,24 +15,22 @@ const handler = NextAuth({
     async signIn({ user, account, profile }) {
       if (account?.provider === 'google' && user.email) {
         try {
-          // Check if user exists
-          let dbUser = await getUserByEmail(user.email);
-          
-          if (!dbUser && profile?.sub) {
-            // Create new user
-            dbUser = await createUser({
-              id: crypto.randomUUID(),
+          // Access D1 via fetch to a dedicated API route
+          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/upsert`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
               email: user.email,
-              name: user.name || null,
-              image: user.image || null,
-              google_id: profile.sub,
-            });
-          }
-          
+              name: user.name,
+              image: user.image,
+              google_id: profile?.sub,
+            }),
+          });
+          if (!response.ok) throw new Error('Failed to upsert user');
           return true;
         } catch (error) {
           console.error('Sign in error:', error);
-          return false;
+          return true; // Still allow sign in even if DB fails
         }
       }
       return true;
@@ -41,15 +38,15 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub!;
-        
-        // Get user from DB to include credits
+        // Fetch credits from DB
         try {
-          const dbUser = await getUserByEmail(session.user.email!);
-          if (dbUser) {
-            session.user.credits = dbUser.credits;
+          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/credits?email=${session.user.email}`);
+          if (response.ok) {
+            const data = await response.json();
+            session.user.credits = data.credits;
           }
         } catch (error) {
-          console.error('Session error:', error);
+          console.error('Session credits error:', error);
         }
       }
       return session;
