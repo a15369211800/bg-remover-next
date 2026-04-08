@@ -1,0 +1,7 @@
+name = "bg-remover-next"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bg-remover-db"
+database_id = "b62e0d2c-826f-4376-96d4-0aa1cc6b3aff"
